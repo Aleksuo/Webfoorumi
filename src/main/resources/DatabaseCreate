@@ -1,0 +1,35 @@
+CREATE TABLE Kayttaja(
+    id integer PRIMARY KEY,
+    nimi varchar(30)
+);
+
+CREATE TABLE Alue(
+    id integer PRIMARY KEY,
+    nimi varchar
+);
+
+CREATE TABLE Keskustelu(
+    id integer PRIMARY KEY,
+    nimi varchar(100),
+    timestamp date,
+    alue_id integer,
+    aloittaja_id integer,
+    FOREIGN KEY(alue_id) REFERENCES Alue(id),
+    FOREIGN KEY(aloittaja_id) REFERENCES Kayttaja(id)
+);
+
+CREATE TABLE Viesti(
+    id integer PRIMARY KEY,
+    sisalto varchar(250),
+    timestamp date,
+    keskustelu_id integer,
+    lahettaja_id integer,
+    vastaus_id integer,
+    FOREIGN KEY(keskustelu_id) REFERENCES Keskustelu(id),
+    FOREIGN KEY(lahettaja_id) REFERENCES Kayttaja(id),
+    FOREIGN KEY(vastaus_id) REFERENCES Viesti(id)
+);
+
+
+    
+    

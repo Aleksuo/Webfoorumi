@@ -5,7 +5,7 @@ CREATE TABLE Kayttaja(
 
 CREATE TABLE Alue(
     id integer PRIMARY KEY,
-    nimi varchar
+    nimi varchar(30)
 );
 
 CREATE TABLE Keskustelu(

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
@@ -12,32 +11,30 @@
         </style>
     </head>
     <body>
-        <h1>Foorumi</h1>
+        <h1 th:text="${alue.nimi}"></h1>
         <table style="width:100%">
             <tr>
                 <td>
                     id
                 </td>
                 <td>
-                    Alue
+                    Keskustelu
                 </td>
                 
             </tr>
-            <tr th:each="alue: ${alueet}">
+            <tr th:each="keskustelu: ${keskustelut}">
                 <td >
-                    <span th:text="${alue.id}"></span> 
+                    <span th:text="${keskustelu.id}"></span> 
                 </td>
                     
                 <td >
-                    <a href="alue.html" th:href="@{http://localhost:4567/alue/{id}(id=${alue.id})}"><span th:text="${alue.nimi}"></span></a>
+                    <span th:text="${keskustelu.nimi}"></span>
                 </td>
+                
+            
             </tr>
         </table>
-        <form method="POST" action="/">
-            Nimi:<br/>
-            <input type="text" name="nimi"/><br/>
-            <input type="submit" value="Lisää alue"/>
-        </form>
+        
 
     </body>
 </html>

@@ -9,26 +9,21 @@ import Webfoorumi.Collectors.Collector;
 import java.sql.*;
 import java.util.*;
 
-
-
 /**
  *
  * @author Aleksi
  */
 public class Database<T> {
+
     private boolean debug;
-    private Connection connection;
+    private String address;
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
+    public Connection getConnection()throws SQLException {
+        return DriverManager.getConnection(this.address);
     }
 
     public Database(String address) throws Exception {
-        this.connection = DriverManager.getConnection(address);
+        this.address = address;
     }
 
     public void setDebugMode(boolean d) {
@@ -37,7 +32,7 @@ public class Database<T> {
 
     public List<T> queryAndCollect(String query, Collector<T> col) throws SQLException {
         List<T> rows = new ArrayList<>();
-        Statement stmt = connection.createStatement();
+        Statement stmt = getConnection().createStatement();
         ResultSet rs = stmt.executeQuery(query);
 
         while (rs.next()) {
@@ -54,6 +49,26 @@ public class Database<T> {
         rs.close();
         stmt.close();
         return rows;
+    }
+
+    public int update(String updateQuery, Object... params) throws SQLException {
+        PreparedStatement stmt = getConnection().prepareStatement(updateQuery);
+
+        for (int i = 0; i < params.length; i++) {
+            stmt.setObject(i + 1, params[i]);
+        }
+
+        int changes = stmt.executeUpdate();
+
+        if (debug) {
+            System.out.println("---");
+            System.out.println(updateQuery);
+            System.out.println("Changed rows: " + changes);
+            System.out.println("---");
+        }
+        stmt.close();
+
+        return changes;
     }
 
     private void debug(ResultSet rs) throws SQLException {

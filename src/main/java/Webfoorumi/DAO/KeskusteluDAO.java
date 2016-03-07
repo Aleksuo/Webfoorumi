@@ -14,6 +14,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
 
         int id = rs.getInt("id");
         String nimi = rs.getString("nimi");
-        Date timestamp = rs.getDate("timestamp");
+        String timestamp = rs.getString("timestamp");
         int alue_id = rs.getInt("alue_id");
         int aloittaja_id = rs.getInt("aloittaja_id");
 
@@ -81,13 +82,15 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
             
             int id = rs.getInt("id");
             String nimi = rs.getString("nimi");
-            Date timestamp = rs.getDate("timestamp");
+            String timestamp = rs.getString("timestamp");
             int alue_id = rs.getInt("alue_id");
             int aloittaja_id = rs.getInt("aloittaja_id");
             
             Keskustelu kesk = new Keskustelu(id,nimi,timestamp);
             kesk.setAloittaja(this.kdao.findOne(aloittaja_id));
             kesk.setAlue(this.adao.findOne(alue_id));
+            keskustelut.add(kesk);
+            
 
         }
 

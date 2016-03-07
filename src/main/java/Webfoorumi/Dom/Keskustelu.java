@@ -6,6 +6,7 @@
 package Webfoorumi.Dom;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 /**
  *
@@ -14,12 +15,12 @@ import java.sql.Date;
 public class Keskustelu {
     private int id;
     private String nimi;
-    private Date timestamp;
+    private String timestamp;
     
     private Alue alue;
     private Kayttaja aloittaja;
     
-    public Keskustelu(int id , String nimi, Date timestamp){
+    public Keskustelu(int id , String nimi, String timestamp){
         this.id = id;
         this.nimi = nimi;
         this.timestamp = timestamp;
@@ -41,11 +42,11 @@ public class Keskustelu {
         this.nimi = nimi;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 

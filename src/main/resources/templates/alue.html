@@ -11,14 +11,25 @@
         </style>
     </head>
     <body>
+        
         <h1 th:text="${alue.nimi}"></h1>
+        <a href="/">Palaa takaisin</a>
         <table style="width:100%">
             <tr>
                 <td>
-                    id
+                    Id
                 </td>
                 <td>
                     Keskustelu
+                </td>
+                <td>
+                    Aloittaja
+                </td>
+                <td>
+                    Aloitettu
+                </td>
+                <td>
+                    Viimeisin viesti
                 </td>
                 
             </tr>
@@ -29,6 +40,15 @@
                     
                 <td >
                     <span th:text="${keskustelu.nimi}"></span>
+                </td>
+                <td>
+                    <span th:text="${keskustelu.aloittaja.nimi}"></span>
+                </td>
+                <td>
+                    <span th:text="${keskustelu.timestamp}"></span>
+                </td>
+                <td>
+                    <span >viimeinen viesti timestamp</span>
                 </td>
                 
             

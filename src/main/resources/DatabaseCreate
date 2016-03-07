@@ -11,7 +11,7 @@ CREATE TABLE Alue(
 CREATE TABLE Keskustelu(
     id integer PRIMARY KEY,
     nimi varchar(100),
-    timestamp date,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     alue_id integer,
     aloittaja_id integer,
     FOREIGN KEY(alue_id) REFERENCES Alue(id),
@@ -21,7 +21,7 @@ CREATE TABLE Keskustelu(
 CREATE TABLE Viesti(
     id integer PRIMARY KEY,
     sisalto varchar(250),
-    timestamp date,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     keskustelu_id integer,
     lahettaja_id integer,
     vastaus_id integer,

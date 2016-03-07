@@ -37,20 +37,24 @@ public class Main  {
 
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
-        
+        //todo parempi alueen lisäys?
+        //todo alueen poisto?
         post("/", (req, res)-> {
             String nimi = req.queryParams("nimi");
-            database.update("INSERT INTO Alue(nimi) VALUES(?)", nimi);
+            database.update("INSERT INTO Alue(nimi) VALUES(?)", nimi); 
             res.redirect("/");
             return null;
         });
-        
+        // todo: etsi ainoastaan tietyn alueen keskustelut
         get("/alue/:id", (req,res) -> {
            HashMap map = new HashMap<>(); 
            map.put("alue", aluedao.findOne(Integer.parseInt(req.params("id"))));
-           map.put("keskustelut", keskusteludao.findAll() );// todo: etsi ainoastaan alueen keskustelut
+           map.put("keskustelut", keskusteludao.findAll() );
            return new ModelAndView(map, "alue");
-        }, new ThymeleafTemplateEngine()); 
+        }, new ThymeleafTemplateEngine());
+        //todo uuden keskustelun lisäys(luomiselle oma sivu?)
+        
+        //todo näytä keskustelun viestit
     }
 
 }

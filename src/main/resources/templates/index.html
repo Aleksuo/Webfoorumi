@@ -21,6 +21,12 @@
                 <td>
                     Alue
                 </td>
+                <td>
+                    Viestejä yht.
+                </td>
+                <td>
+                    Viimeisin viesti
+                </td>
                 
             </tr>
             <tr th:each="alue: ${alueet}">
@@ -30,6 +36,12 @@
                     
                 <td >
                     <a href="alue.html" th:href="@{http://localhost:4567/alue/{id}(id=${alue.id})}"><span th:text="${alue.nimi}"></span></a>
+                </td>
+                <td>
+                    <span>viestien lkm.</span>
+                </td>
+                <td>
+                    <span>viimeisin</span>
                 </td>
             </tr>
         </table>

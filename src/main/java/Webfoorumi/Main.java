@@ -29,6 +29,8 @@ public class Main  {
         KayttajaDAO kayttajadao= new KayttajaDAO(database);
         KeskusteluDAO keskusteludao = new KeskusteluDAO(database,kayttajadao,aluedao);
         
+        //todo ääkköset ei jostain syystä toimi 
+        
         //todo tarvitaan jotain jolla saadaan vika viesti viestit yht ym.
         get("/", (req, res) -> {
 
@@ -37,6 +39,7 @@ public class Main  {
 
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
+        
         //todo parempi alueen lisäys?
         //todo alueen poisto?
         post("/", (req, res)-> {
@@ -45,6 +48,7 @@ public class Main  {
             res.redirect("/");
             return null;
         });
+        
         // todo: etsi ainoastaan tietyn alueen keskustelut
         get("/alue/:id", (req,res) -> {
            HashMap map = new HashMap<>(); 

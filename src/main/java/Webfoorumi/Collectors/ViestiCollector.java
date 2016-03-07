@@ -20,7 +20,7 @@ public class ViestiCollector implements Collector<Viesti> {
     public Viesti collect(ResultSet rs) throws SQLException {
         int tunniste = rs.getInt("id");
         String sisalto = rs.getString("sisalto");
-        Date pvm = rs.getDate("timestamp");
+        String pvm = rs.getString("timestamp");
 
         return new Viesti(tunniste, sisalto, pvm);
     }

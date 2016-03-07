@@ -29,7 +29,7 @@ public class Main  {
         KayttajaDAO kayttajadao= new KayttajaDAO(database);
         KeskusteluDAO keskusteludao = new KeskusteluDAO(database,kayttajadao,aluedao);
         
-        
+        //todo tarvitaan jotain jolla saadaan vika viesti viestit yht ym.
         get("/", (req, res) -> {
 
             HashMap map = new HashMap<>();

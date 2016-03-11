@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -87,5 +88,36 @@ public class AlueDAO implements Dao<Alue, Integer> {
         connection.close();
 
     }
+
+//    @Override
+//    public List<Alue> findAllIn(Collection<Integer> keys) throws SQLException {
+//        if (keys.isEmpty()) {
+//            return new ArrayList<>();
+//        }
+//
+//        StringBuilder muuttujat = new StringBuilder("?");
+//        for (int i = 1; i < keys.size(); i++) {
+//            muuttujat.append(", ?");
+//        }
+//
+//        Connection connection = database.getConnection();
+//        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Alue WHERE id IN (" + muuttujat + ")");
+//        int laskuri = 1;
+//        for (int key : keys) {
+//            stmt.setObject(laskuri, key);
+//            laskuri++;
+//        }
+//
+//        ResultSet rs = stmt.executeQuery();
+//        List<Alue> alueet = new ArrayList<>();
+//        while (rs.next()) {
+//            int id = rs.getInt("id");
+//            String nimi = rs.getString("nimi");
+//
+//            alueet.add(new Alue(id, nimi));
+//
+//        }
+//        return alueet;
+//    }
 
 }

@@ -56,7 +56,7 @@ public class Main  {
         get("/alue/:id", (req,res) -> {
            HashMap map = new HashMap<>(); 
            map.put("alue", aluedao.findOne(Integer.parseInt(req.params("id"))));
-           map.put("keskustelut", keskusteludao.findAll() );
+           map.put("keskustelut", keskusteludao.alueenKeskustelut(Integer.parseInt(req.params("id"))));
            return new ModelAndView(map, "alue");
         }, new ThymeleafTemplateEngine());
         //todo uuden keskustelun lisäys(luomiselle oma sivu?)

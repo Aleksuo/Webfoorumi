@@ -74,23 +74,20 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelu");
         ResultSet rs = stmt.executeQuery();
 
-        
-
         List<Keskustelu> keskustelut = new ArrayList<>();
 
         while (rs.next()) {
-            
+
             int id = rs.getInt("id");
             String nimi = rs.getString("nimi");
             String timestamp = rs.getString("timestamp");
             int alue_id = rs.getInt("alue_id");
             int aloittaja_id = rs.getInt("aloittaja_id");
-            
-            Keskustelu kesk = new Keskustelu(id,nimi,timestamp);
+
+            Keskustelu kesk = new Keskustelu(id, nimi, timestamp);
             kesk.setAloittaja(this.kdao.findOne(aloittaja_id));
             kesk.setAlue(this.adao.findOne(alue_id));
             keskustelut.add(kesk);
-            
 
         }
 
@@ -111,6 +108,34 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
 
         stmt.close();
         connection.close();
+    }
+
+    public List<Keskustelu> alueenKeskustelut(Integer key) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelu WHERE Keskustelu.alue_id = ?");
+        stmt.setObject(1, key);
+        ResultSet rs = stmt.executeQuery();
+
+        List<Keskustelu> keskustelut = new ArrayList<>();
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String nimi = rs.getString("nimi");
+            String timestamp = rs.getString("timestamp");
+            int alue_id = rs.getInt("alue_id");
+            int aloittaja_id = rs.getInt("aloittaja_id");
+
+            Keskustelu kesk = new Keskustelu(id, nimi, timestamp);
+            kesk.setAloittaja(this.kdao.findOne(aloittaja_id));
+            kesk.setAlue(this.adao.findOne(alue_id));
+            keskustelut.add(kesk);
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return keskustelut;
+
     }
 
 }

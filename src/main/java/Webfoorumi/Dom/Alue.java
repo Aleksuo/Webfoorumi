@@ -47,5 +47,13 @@ public class Alue {
         this.keskustelut = keskustelut;
     }
     
+    public int viestienlkm(){
+        int lkm = 0;
+        for(Keskustelu k : keskustelut){
+            lkm += k.viestitlkm();
+        }
+        return lkm;
+    }
+    
     
 }

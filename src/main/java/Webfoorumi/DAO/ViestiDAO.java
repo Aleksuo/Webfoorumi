@@ -50,7 +50,7 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
     
      public List<Viesti> keskustelunViestit(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE Viesti.keskustelu_id = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE Viesti.keskustelu_id = ? ");
         stmt.setObject(1, key);
         ResultSet rs = stmt.executeQuery();
 
@@ -89,6 +89,8 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
                 
         return lkm;
     }
+    
+   
 
     @Override
     public Viesti lastInsert() throws SQLException {

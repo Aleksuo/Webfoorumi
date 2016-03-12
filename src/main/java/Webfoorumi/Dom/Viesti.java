@@ -14,13 +14,13 @@ import java.sql.Date;
 public class Viesti {
     private int id;
     private String sisalto;
-    private Date timestamp;
+    private String timestamp;
     
-    private Keskustelu keskustelu;
+    private int keskustelu;
     private Kayttaja lahettaja;
     private Viesti vastaus;
     
-    public Viesti(int id, String sisalto, Date timestamp){
+    public Viesti(int id, String sisalto, String timestamp){
         this.id = id;
         this.sisalto = sisalto;
         this.timestamp = timestamp;
@@ -42,19 +42,19 @@ public class Viesti {
         this.sisalto = sisalto;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
-    public Keskustelu getKeskustelu() {
+    public int getKeskustelu() {
         return keskustelu;
     }
 
-    public void setKeskustelu(Keskustelu keskustelu) {
+    public void setKeskustelu(int keskustelu) {
         this.keskustelu = keskustelu;
     }
 
@@ -73,6 +73,8 @@ public class Viesti {
     public void setVastaus(Viesti vastaus) {
         this.vastaus = vastaus;
     }
+    
+    
     
     
 }

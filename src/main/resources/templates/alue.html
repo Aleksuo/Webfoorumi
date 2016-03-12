@@ -1,0 +1,75 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>APA</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <style>
+            table, th, td {
+            border: 1px solid black;
+        }
+        </style>
+    </head>
+    <body>
+        
+        <h1 th:text="${alue.nimi}"></h1>
+        <a href="/">Palaa takaisin</a>
+        <table style="width:100%">
+            <tr>
+                <td>
+                    Id
+                </td>
+                <td>
+                    Keskustelu
+                </td>
+                <td>
+                    Viestejä yht.
+                </td>
+                <td>
+                    Aloittaja
+                </td>
+                <td>
+                    Aloitettu
+                </td>
+                <td>
+                    Viimeisin viesti
+                </td>
+                
+            </tr>
+            <tr th:each="keskustelu : ${alue.keskustelut}">
+                <td >
+                    <span th:text="${keskustelu.id}"></span> 
+                </td>
+                    
+                <td >
+                    <a href="keskustelu.html" th:href="@{http://localhost:4567/keskustelu/{id}(id=${keskustelu.id})}"><span th:text="${keskustelu.nimi}"></span></a>
+                </td>
+                <td>
+                    <span th:text="${#lists.size(keskustelu.viestit)}"></span>
+                </td>
+                <td>
+                    <span th:text="${keskustelu.aloittaja.nimi}"></span>
+                </td>
+                <td>
+                    <span th:text="${keskustelu.timestamp}"></span>
+                </td>
+                <td>
+                    <span th:text="${keskustelu.getUusinviesti().getTimestamp()}"></span>
+                </td>
+                
+            
+            </tr>
+        </table>
+        <form method="POST" action="" id ="lisays">
+            Otsikko:<br/>
+            <input type="text" name="otsikko"/><br/>
+            Viesti:<br/>
+            <textarea rows ="5" cols = "50" name = "viesti" form="lisays" maxlength="250">Lisää teksti tähän...</textarea><br/>
+            Nimimerkki:<br/>
+            <input type ="text" name ="nimi"/><br/>
+            <input type="submit" value="Lisää keskustelu"/>
+        </form>
+        
+
+    </body>
+</html>

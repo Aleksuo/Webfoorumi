@@ -9,6 +9,7 @@ import Webfoorumi.Dom.Keskustelu;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 /**
  *
@@ -20,7 +21,7 @@ public class KeskusteluCollector implements Collector<Keskustelu> {
     public Keskustelu collect(ResultSet rs) throws SQLException {
         int tunniste = rs.getInt("id");
         String nimi = rs.getString("nimi");
-        Date pvm = rs.getDate("timestamp");
+        String pvm = rs.getString("timestamp");
 
         return new Keskustelu(tunniste, nimi, pvm);
     }

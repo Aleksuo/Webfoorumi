@@ -29,9 +29,12 @@ import spark.template.thymeleaf.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
+        if (System.getenv("PORT") != null) {
+            port(Integer.valueOf(System.getenv("PORT")));
+        }
         Database database = new Database("jdbc:sqlite:tyhja.db");
         database.setDebugMode(true);
-        
+
         KayttajaDAO kayttajadao = new KayttajaDAO(database);
         ViestiDAO viestidao = new ViestiDAO(database, kayttajadao);
         KeskusteluDAO keskusteludao = new KeskusteluDAO(database, kayttajadao, viestidao);
@@ -49,7 +52,6 @@ public class Main {
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
 
-        
         //todo alueen poisto?
         post("/", (req, res) -> {
             String nimi = checker.stripHtml(req.queryParams("nimi"));
@@ -58,14 +60,12 @@ public class Main {
             return null;
         });
 
-        
-        
         get("/alue/:id", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("alue", aluedao.findOne(Integer.parseInt(req.params("id"))));
             return new ModelAndView(map, "alue");
         }, new ThymeleafTemplateEngine());
-        
+
         post("/alue/:id", (req, res) -> {
             String otsikko = checker.stripHtml(req.queryParams("otsikko"));
             String viesti = checker.stripHtml(req.queryParams("viesti"));
@@ -75,16 +75,14 @@ public class Main {
             Kayttaja kayttaja = kayttajadao.lastInsert();
 
             keskusteludao.insert(otsikko, Integer.parseInt(req.params("id")), kayttaja.getId());
-            Keskustelu k =  keskusteludao.lastInsert();
+            Keskustelu k = keskusteludao.lastInsert();
 
             viestidao.insert(viesti, k.getId(), kayttaja.getId(), -1);
 
             res.redirect("" + Integer.parseInt(req.params("id")));
             return null;
         });
-        
-        
-        
+
         get("/keskustelu/:id", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("keskustelu", keskusteludao.findOne(Integer.parseInt(req.params("id"))));
@@ -92,14 +90,13 @@ public class Main {
 
             return new ModelAndView(map, "keskustelu");
         }, new ThymeleafTemplateEngine());
-        
+
         post("/keskustelu/:id", (req, res) -> {
             String viesti = checker.stripHtml(req.queryParams("viesti"));
             String nimi = checker.stripHtml(req.queryParams("nimi"));
 
             kayttajadao.insert(nimi);
             Kayttaja kayttaja = kayttajadao.lastInsert();
-
 
             viestidao.insert(viesti, Integer.parseInt(req.params("id")), kayttaja.getId(), -1);
 

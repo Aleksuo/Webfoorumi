@@ -36,6 +36,7 @@ public class Main {
         ViestiDAO viestidao = new ViestiDAO(database, kayttajadao);
         KeskusteluDAO keskusteludao = new KeskusteluDAO(database, kayttajadao, viestidao);
         AlueDAO aluedao = new AlueDAO(database, keskusteludao);
+        HtmlChecker checker = new HtmlChecker();
         
 
         //todo ääkköset ei jostain syystä toimi 
@@ -51,7 +52,7 @@ public class Main {
         
         //todo alueen poisto?
         post("/", (req, res) -> {
-            String nimi = req.queryParams("nimi");
+            String nimi = checker.stripHtml(req.queryParams("nimi"));
             aluedao.insert(nimi);
             res.redirect("/");
             return null;
@@ -66,9 +67,9 @@ public class Main {
         }, new ThymeleafTemplateEngine());
         
         post("/alue/:id", (req, res) -> {
-            String otsikko = req.queryParams("otsikko");
-            String viesti = req.queryParams("viesti");
-            String nimi = req.queryParams("nimi");
+            String otsikko = checker.stripHtml(req.queryParams("otsikko"));
+            String viesti = checker.stripHtml(req.queryParams("viesti"));
+            String nimi = checker.stripHtml(req.queryParams("nimi"));
 
             kayttajadao.insert(nimi);
             Kayttaja kayttaja = kayttajadao.lastInsert();
@@ -93,8 +94,8 @@ public class Main {
         }, new ThymeleafTemplateEngine());
         
         post("/keskustelu/:id", (req, res) -> {
-            String viesti = req.queryParams("viesti");
-            String nimi = req.queryParams("nimi");
+            String viesti = checker.stripHtml(req.queryParams("viesti"));
+            String nimi = checker.stripHtml(req.queryParams("nimi"));
 
             kayttajadao.insert(nimi);
             Kayttaja kayttaja = kayttajadao.lastInsert();

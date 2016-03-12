@@ -6,6 +6,7 @@
 package Webfoorumi.DAO;
 
 import Webfoorumi.Database.Database;
+import Webfoorumi.Dom.Kayttaja;
 import Webfoorumi.Dom.Viesti;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -90,7 +91,33 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
         return lkm;
     }
     
-   
+   public Viesti keskustelunUusinViesti(Integer key) throws SQLException {
+       Connection connection = database.getConnection();
+       PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti Where Viesti.keskustelu_id = ? ORDER BY id DESC LIMIT 1");
+       stmt.setObject(1, key);
+       ResultSet rs = stmt.executeQuery();
+       if(!rs.next()){
+           return null;
+       }
+       int id = rs.getInt("id");
+       String sisalto = rs.getString("sisalto");
+       String timestamp = rs.getString("timestamp");
+       int keskustelu_id = rs.getByte("keskustelu_id");
+       int k_id = rs.getInt("lahettaja_id");
+       rs.close();
+       stmt.close();
+       connection.close();
+       
+       Kayttaja lahettaja = kdao.findOne(k_id);
+       
+       Viesti viesti = new Viesti(id,sisalto, timestamp);
+       viesti.setKeskustelu(keskustelu_id);
+       viesti.setLahettaja(lahettaja);
+       
+       
+       
+       return viesti;
+   }
 
     @Override
     public Viesti lastInsert() throws SQLException {

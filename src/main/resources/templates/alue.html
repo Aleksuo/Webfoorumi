@@ -54,7 +54,7 @@
                     <span th:text="${keskustelu.timestamp}"></span>
                 </td>
                 <td>
-                    <span >uusin</span>
+                    <span th:text="${keskustelu.getUusinviesti().getTimestamp()}"></span>
                 </td>
                 
             

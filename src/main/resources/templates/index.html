@@ -41,7 +41,7 @@
                     <span th:text="${alue.viestienlkm()}"></span>
                 </td>
                 <td>
-                    <span>viimeisin</span>
+                    <span th:text="${alue.getUusinviesti() != null} ? ${alue.getUusinviesti().getTimestamp()} : '-'"></span>
                 </td>
             </tr>
         </table>

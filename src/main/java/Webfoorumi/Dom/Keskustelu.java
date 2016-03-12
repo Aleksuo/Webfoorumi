@@ -21,6 +21,7 @@ public class Keskustelu {
     private int alue;
     private Kayttaja aloittaja;
     private List<Viesti> viestit;
+    private Viesti uusinviesti;
     
     public Keskustelu(int id , String nimi, String timestamp){
         this.id = id;
@@ -80,5 +81,14 @@ public class Keskustelu {
     public int viestitlkm(){
         return viestit.size();
     }
+
+    public Viesti getUusinviesti() {
+        return uusinviesti;
+    }
+
+    public void setUusinviesti(Viesti uusinviesti) {
+        this.uusinviesti = uusinviesti;
+    }
+    
     
 }

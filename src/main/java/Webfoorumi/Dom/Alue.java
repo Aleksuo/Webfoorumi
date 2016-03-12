@@ -16,6 +16,8 @@ public class Alue {
     private String nimi;
     
     private List<Keskustelu> keskustelut;
+    private Viesti uusinviesti;
+    
 
     
     public Alue(int id, String nimi){
@@ -54,6 +56,17 @@ public class Alue {
         }
         return lkm;
     }
+
+    public Viesti getUusinviesti() {
+        
+        return uusinviesti;
+    }
+
+    public void setUusinviesti(Viesti uusinviesti) {
+        this.uusinviesti = uusinviesti;
+    }
+    
+    
     
     
 }

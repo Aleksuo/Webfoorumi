@@ -29,7 +29,7 @@ import spark.template.thymeleaf.*;
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Database database = new Database("jdbc:sqlite:testifoorumi.db");
+        Database database = new Database("jdbc:sqlite:tyhja.db");
         database.setDebugMode(true);
         
         KayttajaDAO kayttajadao = new KayttajaDAO(database);

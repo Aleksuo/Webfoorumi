@@ -1,0 +1,46 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>APA</title>
+        <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <a href="/">Palaa takaisin</a>
+        <h1 th:text="${keskustelu.nimi}"></h1>
+        <table style="width:100%">
+            <tr>
+                <td>Id</td>
+                <td>Viesti</td>
+                <td>Lähettäjä</td>
+                <td>Timestamp</td>
+
+            </tr>
+            <tr th:each="viesti: ${viestit}">
+                <td>
+                    <span th:text="${viesti.id}"></span>
+                </td>
+                <td>
+                    <span th:text="${viesti.sisalto}"></span>
+                </td>
+                <td>
+                    <span th:text="${viesti.lahettaja.nimi}"></span>
+                </td>
+                <td>
+                    <span th:text="${viesti.timestamp}"></span>
+                </td>
+            </tr>
+        </table>
+        <form method="POST" action="" id ="lisays">
+            Viesti:<br/>
+            <textarea rows ="5" cols = "50" name = "viesti" form="lisays" maxlength="250">Lisää teksti tähän...</textarea><br/>
+            Nimimerkki:<br/>
+            <input type ="text" name ="nimi"/><br/>
+            <input type="submit" value="Lisää viesti"/>
+        </form>
+    </body>
+</html>

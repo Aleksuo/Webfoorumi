@@ -16,7 +16,7 @@ public class Viesti {
     private String sisalto;
     private String timestamp;
     
-    private Keskustelu keskustelu;
+    private int keskustelu;
     private Kayttaja lahettaja;
     private Viesti vastaus;
     
@@ -50,11 +50,11 @@ public class Viesti {
         this.timestamp = timestamp;
     }
 
-    public Keskustelu getKeskustelu() {
+    public int getKeskustelu() {
         return keskustelu;
     }
 
-    public void setKeskustelu(Keskustelu keskustelu) {
+    public void setKeskustelu(int keskustelu) {
         this.keskustelu = keskustelu;
     }
 
@@ -73,6 +73,8 @@ public class Viesti {
     public void setVastaus(Viesti vastaus) {
         this.vastaus = vastaus;
     }
+    
+    
     
     
 }

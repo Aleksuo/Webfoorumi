@@ -26,12 +26,14 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
 
     private Database database;
     private KayttajaDAO kdao;
-    private AlueDAO adao;
+ 
+    private ViestiDAO vdao;
 
-    public KeskusteluDAO(Database db, KayttajaDAO kd, AlueDAO ad) {
+    public KeskusteluDAO(Database db, KayttajaDAO kd,ViestiDAO vd) {
         this.database = db;
         this.kdao = kd;
-        this.adao = ad;
+       
+        this.vdao = vd;
     }
 
     @Override
@@ -54,11 +56,12 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
         int aloittaja_id = rs.getInt("aloittaja_id");
 
         Keskustelu kesk = new Keskustelu(id, nimi, timestamp);
-        Alue alue = adao.findOne(alue_id);
+       
         Kayttaja aloittaja = kdao.findOne(aloittaja_id);
 
         kesk.setAloittaja(aloittaja);
-        kesk.setAlue(alue);
+        kesk.setAlue(alue_id);
+        kesk.setViestit(vdao.keskustelunViestit(id));
 
         rs.close();
         stmt.close();
@@ -86,7 +89,8 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
 
             Keskustelu kesk = new Keskustelu(id, nimi, timestamp);
             kesk.setAloittaja(this.kdao.findOne(aloittaja_id));
-            kesk.setAlue(this.adao.findOne(alue_id));
+            kesk.setAlue(alue_id);
+            kesk.setViestit(this.vdao.keskustelunViestit(id));
             keskustelut.add(kesk);
 
         }
@@ -126,7 +130,8 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
 
             Keskustelu kesk = new Keskustelu(id, nimi, timestamp);
             kesk.setAloittaja(this.kdao.findOne(aloittaja_id));
-            kesk.setAlue(this.adao.findOne(alue_id));
+            kesk.setAlue(alue_id);
+            kesk.setViestit(vdao.keskustelunViestit(id));
             keskustelut.add(kesk);
         }
 

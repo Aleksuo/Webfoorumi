@@ -5,6 +5,8 @@
  */
 package Webfoorumi.Dom;
 
+import java.util.List;
+
 /**
  *
  * @author Aleksi
@@ -12,6 +14,9 @@ package Webfoorumi.Dom;
 public class Alue {
     private int id;
     private String nimi;
+    
+    private List<Keskustelu> keskustelut;
+
     
     public Alue(int id, String nimi){
         this.id = id;
@@ -32,6 +37,14 @@ public class Alue {
 
     public void setNimi(String nimi) {
         this.nimi = nimi;
+    }
+    
+    public List<Keskustelu> getKeskustelut() {
+        return keskustelut;
+    }
+
+    public void setKeskustelut(List<Keskustelu> keskustelut) {
+        this.keskustelut = keskustelut;
     }
     
     

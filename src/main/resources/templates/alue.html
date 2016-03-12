@@ -36,7 +36,7 @@
                 </td>
                 
             </tr>
-            <tr th:each="keskustelu: ${keskustelut}">
+            <tr th:each="keskustelu : ${alue.keskustelut}">
                 <td >
                     <span th:text="${keskustelu.id}"></span> 
                 </td>
@@ -45,7 +45,7 @@
                     <a href="keskustelu.html" th:href="@{http://localhost:4567/keskustelu/{id}(id=${keskustelu.id})}"><span th:text="${keskustelu.nimi}"></span></a>
                 </td>
                 <td>
-                    <span>viestien lkm.</span>
+                    <span th:text="${#lists.size(keskustelu.viestit)}"></span>
                 </td>
                 <td>
                     <span th:text="${keskustelu.aloittaja.nimi}"></span>
@@ -54,7 +54,7 @@
                     <span th:text="${keskustelu.timestamp}"></span>
                 </td>
                 <td>
-                    <span >viimeinen viesti timestamp</span>
+                    <span >uusin</span>
                 </td>
                 
             

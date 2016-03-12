@@ -22,12 +22,11 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
     
     private Database database;
     private KayttajaDAO kdao;
-    private KeskusteluDAO keskdao;
 
-    public ViestiDAO(Database database, KayttajaDAO kdao, KeskusteluDAO keskdao) {
+    public ViestiDAO(Database database, KayttajaDAO kdao) {
         this.database = database;
         this.kdao = kdao;
-        this.keskdao = keskdao;
+        
     }
 
    
@@ -65,7 +64,7 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
 
             Viesti viest = new Viesti(id, sisalto, timestamp);
             viest.setLahettaja(this.kdao.findOne(lahettaja_id));
-            viest.setKeskustelu(this.keskdao.findOne(keskustelu_id));
+            viest.setKeskustelu(keskustelu_id);
             viestit.add(viest);
         }
 
@@ -75,6 +74,20 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
 
         return viestit;
 
+    }
+     
+    public int keskustelunViestitlkm(Integer key) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) AS lukumaara FROM Viesti WHERE Viesti.keskustelu_id = ?");
+        stmt.setObject(1, key);
+        ResultSet rs = stmt.executeQuery();
+        int lkm = rs.getInt("lukumaara");
+        rs.close();
+        stmt.close();
+        connection.close();
+        
+                
+        return lkm;
     }
 
     @Override

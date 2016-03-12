@@ -15,6 +15,7 @@ import Webfoorumi.Dom.Keskustelu;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import spark.ModelAndView;
@@ -30,10 +31,12 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Database database = new Database("jdbc:sqlite:testifoorumi.db");
         database.setDebugMode(true);
-        AlueDAO aluedao = new AlueDAO(database);
+        
         KayttajaDAO kayttajadao = new KayttajaDAO(database);
-        KeskusteluDAO keskusteludao = new KeskusteluDAO(database, kayttajadao, aluedao);
-        ViestiDAO viestidao = new ViestiDAO(database, kayttajadao, keskusteludao);
+        ViestiDAO viestidao = new ViestiDAO(database, kayttajadao);
+        KeskusteluDAO keskusteludao = new KeskusteluDAO(database, kayttajadao, viestidao);
+        AlueDAO aluedao = new AlueDAO(database, keskusteludao);
+        
 
         //todo ääkköset ei jostain syystä toimi 
         //todo tarvitaan jotain jolla saadaan vika viesti viestit yht ym.
@@ -55,10 +58,10 @@ public class Main {
         });
 
         
+        
         get("/alue/:id", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("alue", aluedao.findOne(Integer.parseInt(req.params("id"))));
-            map.put("keskustelut", keskusteludao.alueenKeskustelut(Integer.parseInt(req.params("id"))));
             return new ModelAndView(map, "alue");
         }, new ThymeleafTemplateEngine());
         
@@ -78,6 +81,8 @@ public class Main {
             res.redirect("" + Integer.parseInt(req.params("id")));
             return null;
         });
+        
+        
         
         get("/keskustelu/:id", (req, res) -> {
             HashMap map = new HashMap<>();

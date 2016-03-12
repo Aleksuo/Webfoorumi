@@ -42,7 +42,7 @@
                 </td>
                     
                 <td >
-                    <span th:text="${keskustelu.nimi}"></span>
+                    <a href="keskustelu.html" th:href="@{http://localhost:4567/keskustelu/{id}(id=${keskustelu.id})}"><span th:text="${keskustelu.nimi}"></span></a>
                 </td>
                 <td>
                     <span>viestien lkm.</span>

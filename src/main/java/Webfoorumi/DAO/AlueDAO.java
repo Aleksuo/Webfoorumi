@@ -22,9 +22,11 @@ import java.util.List;
 public class AlueDAO implements Dao<Alue, Integer> {
 
     private Database database;
+    private KeskusteluDAO kdao;
 
-    public AlueDAO(Database database) {
+    public AlueDAO(Database database, KeskusteluDAO kd) {
         this.database = database;
+        this.kdao = kd;
     }
 
     @Override
@@ -43,6 +45,7 @@ public class AlueDAO implements Dao<Alue, Integer> {
         String nimi = rs.getString("nimi");
 
         Alue alue = new Alue(id, nimi);
+        alue.setKeskustelut(kdao.alueenKeskustelut(id));
 
         rs.close();
         stmt.close();
@@ -54,7 +57,7 @@ public class AlueDAO implements Dao<Alue, Integer> {
     @Override
     public List<Alue> findAll() throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Alue");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Alue ORDER BY nimi COLLATE NOCASE");
         ResultSet rs = stmt.executeQuery();
 
         List<Alue> alueet = new ArrayList<>();
@@ -65,6 +68,12 @@ public class AlueDAO implements Dao<Alue, Integer> {
             String nimi = rs.getString("nimi");
 
             Alue a = new Alue(id, nimi);
+            a.setKeskustelut(kdao.alueenKeskustelut(id));
+            
+            if(!a.getKeskustelut().isEmpty()){
+                a.setUusinviesti(a.getKeskustelut().get(0).getUusinviesti());
+            }
+            
             alueet.add(a);
         }
 

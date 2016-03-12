@@ -26,12 +26,14 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
 
     private Database database;
     private KayttajaDAO kdao;
-    private AlueDAO adao;
+ 
+    private ViestiDAO vdao;
 
-    public KeskusteluDAO(Database db, KayttajaDAO kd, AlueDAO ad) {
+    public KeskusteluDAO(Database db, KayttajaDAO kd,ViestiDAO vd) {
         this.database = db;
         this.kdao = kd;
-        this.adao = ad;
+       
+        this.vdao = vd;
     }
 
     @Override
@@ -54,11 +56,13 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
         int aloittaja_id = rs.getInt("aloittaja_id");
 
         Keskustelu kesk = new Keskustelu(id, nimi, timestamp);
-        Alue alue = adao.findOne(alue_id);
+       
         Kayttaja aloittaja = kdao.findOne(aloittaja_id);
 
         kesk.setAloittaja(aloittaja);
-        kesk.setAlue(alue);
+        kesk.setAlue(alue_id);
+        kesk.setViestit(vdao.keskustelunViestit(id));
+        kesk.setUusinviesti(vdao.keskustelunUusinViesti(id));
 
         rs.close();
         stmt.close();
@@ -86,7 +90,9 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
 
             Keskustelu kesk = new Keskustelu(id, nimi, timestamp);
             kesk.setAloittaja(this.kdao.findOne(aloittaja_id));
-            kesk.setAlue(this.adao.findOne(alue_id));
+            kesk.setAlue(alue_id);
+            kesk.setViestit(this.vdao.keskustelunViestit(id));
+            kesk.setUusinviesti(this.vdao.keskustelunUusinViesti(id));
             keskustelut.add(kesk);
 
         }
@@ -112,22 +118,17 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
 
     public List<Keskustelu> alueenKeskustelut(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Keskustelu WHERE Keskustelu.alue_id = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT Keskustelu.id, Max(Viesti.id) AS lkm FROM Keskustelu, Viesti WHERE Keskustelu.alue_id = ? AND Viesti.keskustelu_id = Keskustelu.id"
+                + " GROUP BY Keskustelu.id ORDER BY lkm DESC");
         stmt.setObject(1, key);
         ResultSet rs = stmt.executeQuery();
 
         List<Keskustelu> keskustelut = new ArrayList<>();
         while (rs.next()) {
             int id = rs.getInt("id");
-            String nimi = rs.getString("nimi");
-            String timestamp = rs.getString("timestamp");
-            int alue_id = rs.getInt("alue_id");
-            int aloittaja_id = rs.getInt("aloittaja_id");
-
-            Keskustelu kesk = new Keskustelu(id, nimi, timestamp);
-            kesk.setAloittaja(this.kdao.findOne(aloittaja_id));
-            kesk.setAlue(this.adao.findOne(alue_id));
+            Keskustelu kesk = this.findOne(id);
             keskustelut.add(kesk);
+            
         }
 
         rs.close();
@@ -145,8 +146,11 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
             ResultSet rs = stmt.executeQuery();
             rs.next();
             int k_id = rs.getInt("id");
-            c.close();
             rs.close();
+            stmt.close();
+            c.close();
+            
+         
             Keskustelu k = this.findOne(k_id);
             
             return k;

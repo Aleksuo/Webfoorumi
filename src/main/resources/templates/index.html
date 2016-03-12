@@ -38,10 +38,10 @@
                     <a href="alue.html" th:href="@{http://localhost:4567/alue/{id}(id=${alue.id})}"><span th:text="${alue.nimi}"></span></a>
                 </td>
                 <td>
-                    <span>viestien lkm.</span>
+                    <span th:text="${alue.viestienlkm()}"></span>
                 </td>
                 <td>
-                    <span>viimeisin</span>
+                    <span th:text="${alue.getUusinviesti() != null} ? ${alue.getUusinviesti().getTimestamp()} : '-'"></span>
                 </td>
             </tr>
         </table>

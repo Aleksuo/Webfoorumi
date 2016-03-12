@@ -7,6 +7,7 @@ package Webfoorumi.Dom;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
  *
@@ -17,13 +18,16 @@ public class Keskustelu {
     private String nimi;
     private String timestamp;
     
-    private Alue alue;
+    private int alue;
     private Kayttaja aloittaja;
+    private List<Viesti> viestit;
+    private Viesti uusinviesti;
     
     public Keskustelu(int id , String nimi, String timestamp){
         this.id = id;
         this.nimi = nimi;
         this.timestamp = timestamp;
+        
     }
 
     public int getId() {
@@ -50,11 +54,11 @@ public class Keskustelu {
         this.timestamp = timestamp;
     }
 
-    public Alue getAlue() {
+    public int getAlue() {
         return alue;
     }
 
-    public void setAlue(Alue alue) {
+    public void setAlue(int alue) {
         this.alue = alue;
     }
 
@@ -64,6 +68,26 @@ public class Keskustelu {
 
     public void setAloittaja(Kayttaja aloittaja) {
         this.aloittaja = aloittaja;
+    }
+
+    public List<Viesti> getViestit() {
+        return viestit;
+    }
+
+    public void setViestit(List<Viesti> viestit) {
+        this.viestit = viestit;
+    }
+    
+    public int viestitlkm(){
+        return viestit.size();
+    }
+
+    public Viesti getUusinviesti() {
+        return uusinviesti;
+    }
+
+    public void setUusinviesti(Viesti uusinviesti) {
+        this.uusinviesti = uusinviesti;
     }
     
     

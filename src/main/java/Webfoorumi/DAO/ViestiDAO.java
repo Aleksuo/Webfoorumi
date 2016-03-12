@@ -6,6 +6,7 @@
 package Webfoorumi.DAO;
 
 import Webfoorumi.Database.Database;
+import Webfoorumi.Dom.Kayttaja;
 import Webfoorumi.Dom.Viesti;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,12 +23,11 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
     
     private Database database;
     private KayttajaDAO kdao;
-    private KeskusteluDAO keskdao;
 
-    public ViestiDAO(Database database, KayttajaDAO kdao, KeskusteluDAO keskdao) {
+    public ViestiDAO(Database database, KayttajaDAO kdao) {
         this.database = database;
         this.kdao = kdao;
-        this.keskdao = keskdao;
+        
     }
 
    
@@ -51,7 +51,7 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
     
      public List<Viesti> keskustelunViestit(Integer key) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE Viesti.keskustelu_id = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti WHERE Viesti.keskustelu_id = ? ");
         stmt.setObject(1, key);
         ResultSet rs = stmt.executeQuery();
 
@@ -65,7 +65,7 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
 
             Viesti viest = new Viesti(id, sisalto, timestamp);
             viest.setLahettaja(this.kdao.findOne(lahettaja_id));
-            viest.setKeskustelu(this.keskdao.findOne(keskustelu_id));
+            viest.setKeskustelu(keskustelu_id);
             viestit.add(viest);
         }
 
@@ -76,6 +76,48 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
         return viestit;
 
     }
+     
+    public int keskustelunViestitlkm(Integer key) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT COUNT(*) AS lukumaara FROM Viesti WHERE Viesti.keskustelu_id = ?");
+        stmt.setObject(1, key);
+        ResultSet rs = stmt.executeQuery();
+        int lkm = rs.getInt("lukumaara");
+        rs.close();
+        stmt.close();
+        connection.close();
+        
+                
+        return lkm;
+    }
+    
+   public Viesti keskustelunUusinViesti(Integer key) throws SQLException {
+       Connection connection = database.getConnection();
+       PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Viesti Where Viesti.keskustelu_id = ? ORDER BY id DESC LIMIT 1");
+       stmt.setObject(1, key);
+       ResultSet rs = stmt.executeQuery();
+       if(!rs.next()){
+           return null;
+       }
+       int id = rs.getInt("id");
+       String sisalto = rs.getString("sisalto");
+       String timestamp = rs.getString("timestamp");
+       int keskustelu_id = rs.getByte("keskustelu_id");
+       int k_id = rs.getInt("lahettaja_id");
+       rs.close();
+       stmt.close();
+       connection.close();
+       
+       Kayttaja lahettaja = kdao.findOne(k_id);
+       
+       Viesti viesti = new Viesti(id,sisalto, timestamp);
+       viesti.setKeskustelu(keskustelu_id);
+       viesti.setLahettaja(lahettaja);
+       
+       
+       
+       return viesti;
+   }
 
     @Override
     public Viesti lastInsert() throws SQLException {

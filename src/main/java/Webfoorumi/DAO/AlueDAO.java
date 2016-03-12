@@ -120,4 +120,17 @@ public class AlueDAO implements Dao<Alue, Integer> {
 //        return alueet;
 //    }
 
+   
+    
+
+    @Override
+    public Alue lastInsert() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    public void insert(String nimi) throws SQLException {
+        database.update("INSERT INTO Alue(nimi) VALUES(?)", nimi);
+    }
+
 }

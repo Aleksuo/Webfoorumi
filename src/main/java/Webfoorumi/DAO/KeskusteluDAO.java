@@ -138,4 +138,23 @@ public class KeskusteluDAO implements Dao<Keskustelu, Integer> {
 
     }
 
+    @Override
+    public Keskustelu lastInsert() throws SQLException {
+        Connection c = database.getConnection();
+            PreparedStatement stmt = c.prepareStatement("SELECT * FROM Keskustelu WHERE id = (SELECT MAX(id) FROM Keskustelu)");
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            int k_id = rs.getInt("id");
+            c.close();
+            rs.close();
+            Keskustelu k = this.findOne(k_id);
+            
+            return k;
+            
+    }
+    
+    public void insert(String otsikko, int alue_id, int aloittaja)throws SQLException{
+        database.update("INSERT INTO Keskustelu(nimi,alue_id,aloittaja_id) VALUES(?,?,?)", otsikko, alue_id, aloittaja);
+    }
+
 }

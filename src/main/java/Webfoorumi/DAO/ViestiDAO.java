@@ -76,5 +76,14 @@ public class ViestiDAO implements Dao<Viesti, Integer>{
         return viestit;
 
     }
+
+    @Override
+    public Viesti lastInsert() throws SQLException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    public void insert(String viesti, int keskustelu, int kayttaja, int vastaus ) throws SQLException {
+        database.update("INSERT INTO Viesti(sisalto, keskustelu_id, lahettaja_id, vastaus_id) VALUES(?,?,?,?)", viesti, keskustelu, kayttaja, vastaus);
+    }
     
 }

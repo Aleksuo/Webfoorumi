@@ -10,6 +10,7 @@ import Webfoorumi.DAO.KayttajaDAO;
 import Webfoorumi.DAO.KeskusteluDAO;
 import Webfoorumi.DAO.ViestiDAO;
 import Webfoorumi.Database.Database;
+import Webfoorumi.Dom.Kayttaja;
 import Webfoorumi.Dom.Keskustelu;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -44,52 +45,40 @@ public class Main {
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
 
-        //todo parempi alueen lisäys?
+        
         //todo alueen poisto?
         post("/", (req, res) -> {
             String nimi = req.queryParams("nimi");
-            database.update("INSERT INTO Alue(nimi) VALUES(?)", nimi);
+            aluedao.insert(nimi);
             res.redirect("/");
             return null;
         });
 
-        // todo: etsi ainoastaan tietyn alueen keskustelut
+        
         get("/alue/:id", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("alue", aluedao.findOne(Integer.parseInt(req.params("id"))));
             map.put("keskustelut", keskusteludao.alueenKeskustelut(Integer.parseInt(req.params("id"))));
             return new ModelAndView(map, "alue");
         }, new ThymeleafTemplateEngine());
-        //todo uuden keskustelun lisäys(luomiselle oma sivu?)
+        
         post("/alue/:id", (req, res) -> {
             String otsikko = req.queryParams("otsikko");
             String viesti = req.queryParams("viesti");
             String nimi = req.queryParams("nimi");
 
-            database.update("INSERT INTO Kayttaja(nimi) VALUES(?)", nimi);
-            Connection c = database.getConnection();
-            PreparedStatement stmt = c.prepareStatement("SELECT * FROM Kayttaja WHERE id = (SELECT MAX(id) FROM Kayttaja)");
-            ResultSet rs = stmt.executeQuery();
-            rs.next();
-            int kayttaja = rs.getInt("id");
-            c.close();
-            rs.close();
+            kayttajadao.insert(nimi);
+            Kayttaja kayttaja = kayttajadao.lastInsert();
 
-            database.update("INSERT INTO Keskustelu(nimi,alue_id,aloittaja_id) VALUES(?,?,?)", otsikko, Integer.parseInt(req.params("id")), kayttaja);
-            c = database.getConnection();
-            stmt = c.prepareStatement("SELECT * FROM Keskustelu WHERE id = (SELECT MAX(id) FROM Keskustelu)");
-            rs = stmt.executeQuery();
-            rs.next();
-            int k_id = rs.getInt("id");
-            c.close();
-            rs.close();
+            keskusteludao.insert(otsikko, Integer.parseInt(req.params("id")), kayttaja.getId());
+            Keskustelu k =  keskusteludao.lastInsert();
 
-            database.update("INSERT INTO Viesti(sisalto, keskustelu_id, lahettaja_id, vastaus_id) VALUES(?,?,?,?)", viesti, k_id, kayttaja, null);
+            viestidao.insert(viesti, k.getId(), kayttaja.getId(), -1);
 
             res.redirect("" + Integer.parseInt(req.params("id")));
             return null;
         });
-        //todo näytä keskustelun viestit
+        
         get("/keskustelu/:id", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("keskustelu", keskusteludao.findOne(Integer.parseInt(req.params("id"))));

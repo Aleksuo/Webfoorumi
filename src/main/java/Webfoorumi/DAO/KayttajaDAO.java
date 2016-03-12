@@ -87,6 +87,9 @@ public class KayttajaDAO implements Dao<Kayttaja, Integer> {
         stmt.close();
         connection.close();
     }
+    
+    
+    
 
 //    @Override
 //    public List<Kayttaja> findAllIn(Collection<Integer> keys) throws SQLException {
@@ -118,4 +121,25 @@ public class KayttajaDAO implements Dao<Kayttaja, Integer> {
 //        }
 //        return kayttajat;
 //    }
+
+    @Override
+    public Kayttaja lastInsert() throws SQLException {
+            Connection c = database.getConnection();
+            PreparedStatement stmt = c.prepareStatement("SELECT * FROM Kayttaja WHERE id = (SELECT MAX(id) FROM Kayttaja)");
+            ResultSet rs = stmt.executeQuery();
+            rs.next();
+            int id = rs.getInt("id");
+            String nimi = rs.getString("nimi");
+            c.close();
+            rs.close();
+            
+            return new Kayttaja(id,nimi);
+    }
+
+    
+    public void insert(String nimi) throws SQLException {
+        database.update("INSERT INTO Kayttaja(nimi) VALUES(?)", nimi);
+    }
+
+    
 }

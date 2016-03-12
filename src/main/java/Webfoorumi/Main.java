@@ -86,6 +86,20 @@ public class Main {
 
             return new ModelAndView(map, "keskustelu");
         }, new ThymeleafTemplateEngine());
+        
+        post("/keskustelu/:id", (req, res) -> {
+            String viesti = req.queryParams("viesti");
+            String nimi = req.queryParams("nimi");
+
+            kayttajadao.insert(nimi);
+            Kayttaja kayttaja = kayttajadao.lastInsert();
+
+
+            viestidao.insert(viesti, Integer.parseInt(req.params("id")), kayttaja.getId(), -1);
+
+            res.redirect("" + Integer.parseInt(req.params("id")));
+            return null;
+        });
     }
 
 }

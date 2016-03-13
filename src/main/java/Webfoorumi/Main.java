@@ -32,18 +32,16 @@ public class Main {
         if (System.getenv("PORT") != null) {
             port(Integer.valueOf(System.getenv("PORT")));
         }
-        Database database = new Database("jdbc:sqlite:tyhja.db");
-        database.setDebugMode(true);
+        Database database = new Database("jdbc:sqlite:webfoorumi.db");
 
         KayttajaDAO kayttajadao = new KayttajaDAO(database);
         ViestiDAO viestidao = new ViestiDAO(database, kayttajadao);
         KeskusteluDAO keskusteludao = new KeskusteluDAO(database, kayttajadao, viestidao);
         AlueDAO aluedao = new AlueDAO(database, keskusteludao);
         HtmlChecker checker = new HtmlChecker();
-        
 
-        //todo ääkköset ei jostain syystä toimi 
-        //todo tarvitaan jotain jolla saadaan vika viesti viestit yht ym.
+        
+    
         get("/", (req, res) -> {
 
             HashMap map = new HashMap<>();
@@ -52,10 +50,12 @@ public class Main {
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
 
-        //todo alueen poisto?
+       
         post("/", (req, res) -> {
             String nimi = checker.stripHtml(req.queryParams("nimi"));
-            aluedao.insert(nimi);
+            if (!nimi.isEmpty()) {
+                aluedao.insert(nimi);
+            }
             res.redirect("/");
             return null;
         });
@@ -71,13 +71,15 @@ public class Main {
             String viesti = checker.stripHtml(req.queryParams("viesti"));
             String nimi = checker.stripHtml(req.queryParams("nimi"));
 
-            kayttajadao.insert(nimi);
-            Kayttaja kayttaja = kayttajadao.lastInsert();
+            if (!otsikko.isEmpty() && !viesti.isEmpty() && !nimi.isEmpty()) {
+                kayttajadao.insert(nimi);
+                Kayttaja kayttaja = kayttajadao.lastInsert();
 
-            keskusteludao.insert(otsikko, Integer.parseInt(req.params("id")), kayttaja.getId());
-            Keskustelu k = keskusteludao.lastInsert();
+                keskusteludao.insert(otsikko, Integer.parseInt(req.params("id")), kayttaja.getId());
+                Keskustelu k = keskusteludao.lastInsert();
 
-            viestidao.insert(viesti, k.getId(), kayttaja.getId(), -1);
+                viestidao.insert(viesti, k.getId(), kayttaja.getId(), -1);
+            }
 
             res.redirect("" + Integer.parseInt(req.params("id")));
             return null;
@@ -94,11 +96,15 @@ public class Main {
         post("/keskustelu/:id", (req, res) -> {
             String viesti = checker.stripHtml(req.queryParams("viesti"));
             String nimi = checker.stripHtml(req.queryParams("nimi"));
+            
+            if(!viesti.isEmpty() && !nimi.isEmpty()){
+                kayttajadao.insert(nimi);
+                Kayttaja kayttaja = kayttajadao.lastInsert();
 
-            kayttajadao.insert(nimi);
-            Kayttaja kayttaja = kayttajadao.lastInsert();
+                viestidao.insert(viesti, Integer.parseInt(req.params("id")), kayttaja.getId(), -1);
+            }
 
-            viestidao.insert(viesti, Integer.parseInt(req.params("id")), kayttaja.getId(), -1);
+            
 
             res.redirect("" + Integer.parseInt(req.params("id")));
             return null;

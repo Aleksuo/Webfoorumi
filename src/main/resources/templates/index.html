@@ -22,7 +22,7 @@
                     Alue
                 </td>
                 <td>
-                    Viestejä yht.
+                    Viestit yht.
                 </td>
                 <td>
                     Viimeisin viesti
@@ -35,7 +35,7 @@
                 </td>
                     
                 <td >
-                    <a href="alue.html" th:href="@{http://localhost:4567/alue/{id}(id=${alue.id})}"><span th:text="${alue.nimi}"></span></a>
+                    <a href="alue.html" th:href="@{~/alue/{id}(id=${alue.id})}"><span th:text="${alue.nimi}"></span></a>
                 </td>
                 <td>
                     <span th:text="${alue.viestienlkm()}"></span>

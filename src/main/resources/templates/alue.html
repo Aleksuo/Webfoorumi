@@ -23,7 +23,7 @@
                     Keskustelu
                 </td>
                 <td>
-                    <span>Viestejä yht.</span>
+                    <span>Viestit yht.</span>
                 </td>
                 <td>
                     Aloittaja
@@ -42,7 +42,7 @@
                 </td>
                     
                 <td >
-                    <a href="keskustelu.html" th:href="@{http://localhost:4567/keskustelu/{id}(id=${keskustelu.id})}"><span th:text="${keskustelu.nimi}"></span></a>
+                    <a href="keskustelu.html" th:href="@{~/keskustelu/{id}(id=${keskustelu.id})}"><span th:text="${keskustelu.nimi}"></span></a>
                 </td>
                 <td>
                     <span th:text="${#lists.size(keskustelu.viestit)}"></span>
@@ -64,7 +64,7 @@
             Otsikko:<br/>
             <input type="text" name="otsikko" maxlength="100"/><br/>
             Viesti:<br/>
-            <textarea rows ="5" cols = "50" name = "viesti" form="lisays" maxlength="250">Lisää teksti tähän...</textarea><br/>
+            <textarea rows ="5" cols = "50" name = "viesti" form="lisays" maxlength="250"></textarea><br/>
             Nimimerkki:<br/>
             <input type ="text" name ="nimi" maxlength="30"/><br/>
             <input type="submit" value="Lisää keskustelu"/>

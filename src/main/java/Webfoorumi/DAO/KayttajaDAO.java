@@ -88,39 +88,6 @@ public class KayttajaDAO implements Dao<Kayttaja, Integer> {
         connection.close();
     }
     
-    
-    
-
-//    @Override
-//    public List<Kayttaja> findAllIn(Collection<Integer> keys) throws SQLException {
-//        if (keys.isEmpty()) {
-//            return new ArrayList<>();
-//        }
-//
-//        StringBuilder muuttujat = new StringBuilder("?");
-//        for (int i = 1; i < keys.size(); i++) {
-//            muuttujat.append(", ?");
-//        }
-//
-//        Connection connection = database.getConnection();
-//        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Kayttaja WHERE id IN (" + muuttujat + ")");
-//        int laskuri = 1;
-//        for (int key : keys) {
-//            stmt.setObject(laskuri, key);
-//            laskuri++;
-//        }
-//
-//        ResultSet rs = stmt.executeQuery();
-//        List<Kayttaja> kayttajat = new ArrayList<>();
-//        while (rs.next()) {
-//            int id = rs.getInt("id");
-//            String nimi = rs.getString("nimi");
-//
-//            kayttajat.add(new Kayttaja(id, nimi));
-//
-//        }
-//        return kayttajat;
-//    }
 
     @Override
     public Kayttaja lastInsert() throws SQLException {

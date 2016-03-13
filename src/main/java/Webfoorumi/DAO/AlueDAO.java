@@ -98,40 +98,6 @@ public class AlueDAO implements Dao<Alue, Integer> {
 
     }
 
-//    @Override
-//    public List<Alue> findAllIn(Collection<Integer> keys) throws SQLException {
-//        if (keys.isEmpty()) {
-//            return new ArrayList<>();
-//        }
-//
-//        StringBuilder muuttujat = new StringBuilder("?");
-//        for (int i = 1; i < keys.size(); i++) {
-//            muuttujat.append(", ?");
-//        }
-//
-//        Connection connection = database.getConnection();
-//        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Alue WHERE id IN (" + muuttujat + ")");
-//        int laskuri = 1;
-//        for (int key : keys) {
-//            stmt.setObject(laskuri, key);
-//            laskuri++;
-//        }
-//
-//        ResultSet rs = stmt.executeQuery();
-//        List<Alue> alueet = new ArrayList<>();
-//        while (rs.next()) {
-//            int id = rs.getInt("id");
-//            String nimi = rs.getString("nimi");
-//
-//            alueet.add(new Alue(id, nimi));
-//
-//        }
-//        return alueet;
-//    }
-
-   
-    
-
     @Override
     public Alue lastInsert() throws SQLException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
